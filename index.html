@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>优势谈判学习棋盘</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#d23a24">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="优势谈判">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
 <style>
@@ -96,6 +103,7 @@ td.en{font-size:14px;color:var(--mute);overflow-wrap:anywhere}
 .lab{font-size:13px;color:var(--mute);margin:0 0 4px}
 .script.zh{border-left:3px solid var(--red)}
 .zhr{color:var(--ink);font-size:14px;margin-top:6px}
+.pp{margin:0 max(4vw,16px);padding:16px 0 20px;border-bottom:1px solid var(--line);display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}.pp[hidden]{display:none}.pp h3{margin:0 0 4px;font-size:16px}.pp p{margin:0 0 8px;font-size:14px;color:var(--mute)}.pp textarea{width:100%;font:13px/1.5 ui-monospace,Menlo,monospace;min-height:84px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--soft);color:var(--ink);resize:vertical;word-break:break-all}.pp .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}.pp .msg{font-size:14px;font-weight:700}.pp .msg.ok{color:var(--ok)}.pp .msg.bad{color:var(--red)}.pp ol{margin:0;padding-left:20px;font-size:14px}
 .sync{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:8px;font-size:13px;color:var(--mute)}
 .copy{font-size:13px;min-height:32px;padding:4px 10px}
 .note{font-size:13px;color:var(--mute);margin-top:32px}
@@ -105,13 +113,17 @@ a{color:var(--ink)}
 @media(max-width:600px){.sq{font-size:12px}.core{font-size:18px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{border:0;padding:3px 0}.stack td::before{content:attr(data-l);display:block;font-size:13px;color:var(--mute)}}
 @media(prefers-reduced-motion:reduce){.inner,.bar i{transition:none}}
 </style>
-<script type="application/json" id="claude-artifacts-manifest">{"permissions": []}</script>
 </head>
 <body>
 <header class="top">
 <div><h1>优势谈判学习棋盘</h1><p class="sub">64章，每章一格。读懂原理，背熟话术，做对小测，就把这一格点亮。</p></div>
-<div class="prog" aria-live="polite"><div><b id="pc">0</b> / 64 章已掌握　<span id="pq" class="sub"></span></div><div class="bar"><i id="pb"></i></div><div class="sync"><span id="sy">进度保存在本机</span><button class="btn copy" id="inst" hidden>安装为桌面App</button></div></div>
+<div class="prog" aria-live="polite"><div><b id="pc">0</b> / 64 章已掌握　<span id="pq" class="sub"></span></div><div class="bar"><i id="pb"></i></div><div class="sync"><span id="sy">进度保存在本机</span><button class="btn copy" id="inst" hidden>安装为桌面App</button><button class="btn copy" id="pwa" hidden>安装App</button><button class="btn copy" id="pcode" aria-expanded="false" aria-controls="pp">进度码</button></div></div>
 </header>
+<section class="pp" id="pp" hidden aria-label="进度码">
+<div><h3>导出：把进度带走</h3><p>复制下面这串码，发到另一台设备（比如微信“文件传输助手”）。</p><textarea id="pout" readonly aria-label="当前进度码"></textarea><div class="row"><button class="btn copy" id="pcopy">复制进度码</button><span class="msg" id="pcm"></span></div></div>
+<div><h3>导入：接着上次学</h3><p>在新设备粘贴进度码，点导入。两边的进度会合并，已掌握的章节不会丢。</p><textarea id="pin" aria-label="粘贴进度码" placeholder="把以 YSPT1- 开头的码粘贴到这里"></textarea><div class="row"><button class="btn copy" id="pimp">导入进度</button><span class="msg" id="pim" role="status"></span></div></div>
+<div id="phelp" hidden><h3>安装到手机或电脑</h3><ol><li>iPhone：用 Safari 打开本页，点底部“分享”按钮，选“添加到主屏幕”。</li><li>安卓：用 Chrome 打开，点右上角⋮，选“安装应用”或“添加到主屏幕”。</li><li>电脑：用 Chrome 或 Edge 打开，点地址栏右侧的安装图标。</li></ol><p style="margin-top:8px">装好后从桌面图标打开，没网也能学。</p></div>
+</section>
 <div class="wrap">
 <aside>
 <div class="board" id="board" role="grid" aria-label="64章棋盘"></div>
@@ -122,7 +134,7 @@ a{color:var(--ink)}
 <main>
 <nav class="tabs" id="tabs"><a href="#ch-0" data-v="ch">学习</a><a href="#cards" data-v="cards">闪卡</a><a href="#quiz" data-v="quiz">测验</a><a href="#ref" data-v="ref">速查表</a></nav>
 <div id="view"></div>
-<p class="note">内容根据你上传的英文原书（Roger Dawson，第三版）重新组织、用中文讲解；外贸场景与英文话术为学习示例，使用前请按你的实际产品和条款调整。登录Claude账号打开时，学习进度会自动同步，换电脑、换手机都能接着学。</p>
+<p class="note">内容根据你上传的英文原书（Roger Dawson，第三版）重新组织、用中文讲解；外贸场景与英文话术为学习示例，使用前请按你的实际产品和条款调整。<span id="nsync">登录Claude账号打开时，学习进度会自动同步，换电脑、换手机都能接着学。</span></p>
 </main>
 </div>
 <script>
@@ -1070,6 +1082,55 @@ document.addEventListener("keydown",e=>{
 });
 window.addEventListener("hashchange",route);
 route();
+/* ---- 进度码 ---- */
+const WEB=true;
+const pp=$("#pp"),pcode=$("#pcode");
+const nums=a=>Array.isArray(a)?a.filter(x=>Number.isInteger(x)&&x>=0&&x<=65):[];
+function encode(){
+  const o={v:1,d:st.done,k:st.known,b:st.best,l:st.last,a:st.answered};
+  return "YSPT1-"+btoa(JSON.stringify(o)).replace(/=+$/,"");
+}
+function refreshCode(){$("#pout").value=encode();$("#pcm").textContent="";$("#pcm").className="msg";}
+pcode.addEventListener("click",()=>{const open=pp.hidden;pp.hidden=!open;pcode.setAttribute("aria-expanded",String(open));if(open){refreshCode();$("#phelp").hidden=true;}});
+$("#pcopy").addEventListener("click",()=>{
+  const ta=$("#pout"),m=$("#pcm");refreshCode();
+  const ok=()=>{m.textContent="已复制";m.className="msg ok";};
+  const manual=()=>{ta.focus();ta.select();m.textContent="已选中，请长按或按Ctrl+C复制";m.className="msg";};
+  try{navigator.clipboard.writeText(ta.value).then(ok,manual);}catch(e){manual();}
+});
+$("#pimp").addEventListener("click",()=>{
+  const m=$("#pim"),raw=$("#pin").value.replace(/\s+/g,"");
+  const bad=t=>{m.textContent=t;m.className="msg bad";};
+  if(!raw)return bad("请先粘贴进度码");
+  const i=raw.indexOf("YSPT1-");if(i<0)return bad("这不是本App的进度码，请检查是否复制完整");
+  let o;
+  try{let b=raw.slice(i+6);while(b.length%4)b+="=";o=JSON.parse(atob(b));}catch(e){return bad("进度码不完整或已损坏，请重新复制");}
+  if(!o||o.v!==1)return bad("进度码版本不对，请重新导出");
+  const before=st.done.length;
+  st.done=uni(st.done,nums(o.d));st.known=uni(st.known,nums(o.k));
+  if(typeof o.b==="number"&&o.b>=0&&o.b<=10&&(st.best==null||o.b>st.best))st.best=o.b;
+  if(o.a&&typeof o.a==="object"){for(const k in o.a){if(/^\d+$/.test(k)&&st.answered[k]==null&&Number.isInteger(o.a[k]))st.answered[k]=o.a[k];}}
+  if(Number.isInteger(o.l)&&o.l>=0&&o.l<=65){st.last=o.l;cur=o.l;}
+  save();
+  if(location.hash==="#ch-"+cur)route();else location.hash="#ch-"+cur;
+  drawBoard();refreshCode();$("#pin").value="";
+  m.textContent=`导入成功：已掌握 ${st.done.filter(x=>x>=1&&x<=64).length} 章（新增 ${st.done.length-before} 章）`;m.className="msg ok";
+});
+/* ---- 网页版：可安装、可离线 ---- */
+if(WEB){
+  $("#nsync").textContent="进度保存在这台设备的浏览器里；换设备时用顶部的“进度码”把进度带过去。";
+  sy("进度保存在本机");
+  const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+  const pw=$("#pwa");let dp=null;
+  if(!standalone)pw.hidden=false;
+  window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;pw.hidden=false;});
+  window.addEventListener("appinstalled",()=>{pw.hidden=true;dp=null;});
+  pw.addEventListener("click",async()=>{
+    if(dp){dp.prompt();try{await dp.userChoice;}catch(e){}dp=null;return;}
+    pp.hidden=false;pcode.setAttribute("aria-expanded","true");refreshCode();$("#phelp").hidden=false;$("#phelp").scrollIntoView({block:"nearest"});
+  });
+  if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
 setTimeout(initSync,0);
 }
 </script>
